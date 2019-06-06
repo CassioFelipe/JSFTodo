@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html 
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:ui="http://java.sun.com/jsf/facelets"
+xmlns:p="http://primefaces.org/ui"
+>
+
+<h:head>
+	<title>Todo List</title>
+	<link rel="stylesheet" href="css/bootstrap.css"/>
+	<script src="js/bootstrap.js"/>
+</h:head>
+
+<h:body>
+	<div class = "container-fluid" style="height:30%">
+	<h:form>
+		<h3>New list</h3>
+		<div class= "form-row" >
+			<div class  = "col-md-4 mb-3">
+				<label for="newListInput">Name</label>
+				<h:inputText id="newListInput" class="form-control #{Todo.validateNewName}" value="#{Todo.newName}" valueChangeListener="#{Todo.newNameListener}">
+					<f:ajax event="change" render="@this"/>
+				</h:inputText>
+			<div class="invalid-feedback"> Name must be unique and more than 4 characters</div>
+			</div>
+		
+		</div>
+		
+		<h:commandButton class="btn btn-primary" value="New" type="submit" actionListener="#{Todo.newTodo}" />
+		<hr/>
+	</h:form>
+	</div>
+	
+	<div class="container-fluid" style="height: 500px; overflow: scroll;">
+	<h:form>
+	<div class ="row">
+	<ui:repeat var="item" value="#{Todo.todosList}">
+		<h:panelGroup class= "col-sm-4">
+			<div style="margin-top:2em;">
+			<h5><h:outputText value="#{item.name}"/> </h5>
+			<h:inputTextarea id="updateTodo" value="#{item.desc}" valueChangeListener="#{Todo.inputChange}">
+				<f:ajax execute="@this" render="updateTodo"/>
+				<f:attribute name="name" value="#{item.name}"/>
+			</h:inputTextarea>
+			<br/>
+			<h:commandButton class="btn btn-danger" type="submit" value = "Delete" actionListener="#{Todo.deleteTodo}">
+			<f:attribute name="name" value="#{item.name}" />
+			</h:commandButton>
+			</div>
+		</h:panelGroup>
+	</ui:repeat>
+	</div>
+	</h:form>
+	</div>
+</h:body>
+
+</html>
